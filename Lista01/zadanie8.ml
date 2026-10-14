@@ -10,11 +10,11 @@ let ctrue =
 let cfalse =
   { cbool = fun _ b -> b}
 
-let cand f1 f2 a b =
-  f1.cbool (f2.cbool a b) b
+let cand f1 f2 =
+  { cbool = fun a b -> f1.cbool (f2.cbool a b) b}
 
-let cor f1 f2 a b =
-  f1.cbool a (f2.cbool a b)
+let cor f1 f2 =
+  { cbool = fun a b -> f1.cbool a (f2.cbool a b)}
 
 let cbool_of_bool b =
   if b then ctrue else cfalse
@@ -43,3 +43,6 @@ let rec cnum_of_int n =
 
 let int_of_cnum n =
   n.cnum (( + ) 1) 0
+
+let rec is_zero n =
+  if int_of_cnum n = 0 then ctrue else cfalse
