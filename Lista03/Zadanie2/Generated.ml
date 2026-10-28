@@ -1,13 +1,12 @@
 let is_generated (module P : Perm.S) (p : P.t) (g : P.t list) : bool =
   let module PS = Set.Make(P) in
-
+  let step x =
+    PS.fold (fun s acc ->
+      let acc = PS.add (P.invert s) acc in
+      PS.fold (fun t acc ->
+        PS.add (P.compose s t) acc) x acc) x x
+  in
   let rec loop x =
-    let step x =
-      PS.fold (fun s acc ->
-        let acc = PS.add (P.invert s) acc in
-        PS.fold (fun t acc ->
-          PS.add (P.compose s t) acc) x acc) x x
-    in
     if PS.mem p x then true
     else
       let new_x = step x in
